@@ -1,4 +1,8 @@
 use wasm_bindgen::prelude::*;
+
+mod convert;
+mod format;
+
 use convert::*;
 use format::*;
 

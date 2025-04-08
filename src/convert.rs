@@ -1,6 +1,6 @@
-use image::{DynamicImage, ImageBuffer, Rgba};
+use image::DynamicImage;
 use rayon::prelude::*;
-use webp::{Encoder, WebPMemory};
+use webp::Encoder;
 use crate::format::{identify_format, ImageType};
 use std::error::Error;
 
@@ -28,7 +28,6 @@ pub fn process_to_webp(data: Vec<u8>) -> Result<Vec<u8>, Box<dyn Error>> {
     match format {
         ImageType::Webp => Ok(data),
         ImageType::Png => png_to_webp(data),
-        ImageType::Jpg => jpg_to_webp(data),
         ImageType::Jpeg => jpeg_to_webp(data),
         ImageType::Bmp => bmp_to_webp(data),
         ImageType::Unsupported => Err("Unsupported image format".into()),
@@ -37,7 +36,7 @@ pub fn process_to_webp(data: Vec<u8>) -> Result<Vec<u8>, Box<dyn Error>> {
 
 fn encode_to_webp(img: DynamicImage) -> Result<Vec<u8>, Box<dyn Error>> {
     let rgba = img.to_rgba8();
-    let (width, height) = rgba.dimensions();
+    let (width, _height) = rgba.dimensions();
     let chunks: Vec<_> = rgba.chunks(4 * width as usize).collect();
     
     let encoded_chunks: Vec<_> = chunks.par_iter().map(|chunk| {
