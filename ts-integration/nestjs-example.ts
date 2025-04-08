@@ -1,6 +1,6 @@
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as wasm from '../../pkg/img2webp';
+import * as wasm from '../pkg/img2webp';
 
 @Controller('image')
 export class ImageController {
