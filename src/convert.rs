@@ -1,6 +1,4 @@
-use image::DynamicImage;
-use rayon::prelude::*;
-use webp::Encoder;
+use image::{DynamicImage, ImageOutputFormat};
 use crate::format::{identify_format, ImageType};
 use std::error::Error;
 
@@ -35,18 +33,7 @@ pub fn process_to_webp(data: Vec<u8>) -> Result<Vec<u8>, Box<dyn Error>> {
 }
 
 fn encode_to_webp(img: DynamicImage) -> Result<Vec<u8>, Box<dyn Error>> {
-    let rgba = img.to_rgba8();
-    let (width, _height) = rgba.dimensions();
-    let chunks: Vec<_> = rgba.chunks(4 * width as usize).collect();
-    
-    let encoded_chunks: Vec<_> = chunks.par_iter().map(|chunk| {
-        let encoder = Encoder::from_rgba(chunk, width, 1);
-        encoder.encode(75.0).to_vec()
-    }).collect();
-    
-    let mut result = Vec::new();
-    for chunk in encoded_chunks {
-        result.extend(chunk);
-    }
-    Ok(result)
+    let mut buffer = Vec::new();
+    img.write_to(&mut std::io::Cursor::new(&mut buffer), ImageOutputFormat::WebP)?;
+    Ok(buffer)
 }
