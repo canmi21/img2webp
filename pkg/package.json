@@ -1,0 +1,15 @@
+{
+  "name": "img2webp",
+  "type": "module",
+  "version": "0.9.2",
+  "files": [
+    "img2webp_bg.wasm",
+    "img2webp.js",
+    "img2webp.d.ts"
+  ],
+  "main": "img2webp.js",
+  "types": "img2webp.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
